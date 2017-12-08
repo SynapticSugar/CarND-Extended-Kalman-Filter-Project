@@ -6,22 +6,22 @@ class KalmanFilter {
 public:
 
   // state vector
-  Eigen::VectorXd x_;
+  Eigen::VectorXd x;
 
   // state covariance matrix
-  Eigen::MatrixXd P_;
+  Eigen::MatrixXd P;
 
   // state transition matrix
-  Eigen::MatrixXd F_;
+  Eigen::MatrixXd F;
 
   // process covariance matrix
-  Eigen::MatrixXd Q_;
+  Eigen::MatrixXd Q;
 
   // measurement matrix
-  Eigen::MatrixXd H_;
+  Eigen::MatrixXd H;
 
   // measurement covariance matrix
-  Eigen::MatrixXd R_;
+  Eigen::MatrixXd R;
 
   /**
    * Constructor
@@ -48,9 +48,9 @@ public:
   /**
    * Prediction Predicts the state and the state covariance
    * using the process model
-   * @param delta_T Time between k and k+1 in s
+   * @param delta_t Time between k and k+1 in s
    */
-  void Predict();
+  void Predict(const float delta_t);
 
   /**
    * Updates the state by using standard Kalman Filter equations
