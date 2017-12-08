@@ -39,7 +39,11 @@ FusionEKF::FusionEKF() {
   MatrixXd P = MatrixXd(4, 4);
   P << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 1000;
 
+  // state vector
   VectorXd x = VectorXd(4);
+  x << 0, 0, 0, 0;
+
+  // process covariance matrix
   MatrixXd Q = MatrixXd(4, 4);
 
   // acceleration noise
@@ -58,9 +62,11 @@ FusionEKF::FusionEKF() {
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-  /*****************************************************************************
-   *  Initialization
-   ****************************************************************************/
+  /*    if (measurement_pack.sensor_type != MeasurementPackage::RADAR)
+        return;
+*/ /*****************************************************************************
+                                                                      *  Initialization
+                                                                      ****************************************************************************/
   if (!is_initialized) {
     /**
      * Initialize the state ekf.x with the first measurement.
@@ -121,12 +127,20 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   // update the process covariance matrix Q
   ekf.Q(0, 0) = dt4 / 4 * noise_ax;
+  ekf.Q(0, 1) = 0.f;
   ekf.Q(0, 2) = dt3 / 2 * noise_ax;
+  ekf.Q(0, 3) = 0.f;
+  ekf.Q(1, 0) = 0.f;
   ekf.Q(1, 1) = dt4 / 4 * noise_ay;
+  ekf.Q(1, 2) = 0.f;
   ekf.Q(1, 3) = dt3 / 2 * noise_ay;
   ekf.Q(2, 0) = dt3 / 2 * noise_ax;
+  ekf.Q(2, 1) = 0.f;
   ekf.Q(2, 2) = dt2 * noise_ax;
+  ekf.Q(2, 3) = 0.f;
+  ekf.Q(3, 0) = 0.f;
   ekf.Q(3, 1) = dt3 / 2 * noise_ay;
+  ekf.Q(3, 2) = 0.f;
   ekf.Q(3, 3) = dt2 * noise_ay;
 
   ekf.Predict(dt);

@@ -77,12 +77,12 @@ void Tools::CalculateJacobian(MatrixXd& Hj, const VectorXd& x_state) {
   // compute the Jacobian matrix
   Hj(0, 0) = px / c2;
   Hj(0, 1) = py / c2;
-  Hj(0, 2) = 0;
-  Hj(0, 3) = 0;
+  Hj(0, 2) = 0.f;
+  Hj(0, 3) = 0.f;
   Hj(1, 0) = -py / c1;
   Hj(1, 1) = px / c1;
-  Hj(1, 2) = 0;
-  Hj(1, 3) = 0;
+  Hj(1, 2) = 0.f;
+  Hj(1, 3) = 0.f;
   Hj(2, 0) = py * (vx * py - vy * px) / c3;
   Hj(2, 1) = px * (px * vy - py * vx) / c3;
   Hj(2, 2) = px / c2;

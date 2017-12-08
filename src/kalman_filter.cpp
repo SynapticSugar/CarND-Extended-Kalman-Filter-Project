@@ -51,21 +51,21 @@ void KalmanFilter::Update(const VectorXd &z) {
 float Wrap2pi(float rval) {
   while (rval > M_PI) {
     rval -= 2 * M_PI;
-    fprintf(stderr, "-");
   }
 
   while (rval < -M_PI) {
     rval += 2 * M_PI;
-    fprintf(stderr, "+");
   }
   return rval;
 }
 
 // Utility funtion to convert a cartesian state into a polar state
-VectorXd Cartesian2Polar(const VectorXd &x) {
+VectorXd Cartesian2Polar(VectorXd &x) {
   VectorXd xp = VectorXd(3);
   xp(0) = sqrt(x(0) * x(0) + x(1) * x(1));
-  xp(1) = Wrap2pi(atan2(x(1), x(0)));
+  // ensure we do not divide by zero
+  if (xp(0) < 1e-6) xp(0) = 1e-6;
+  xp(1) = atan2(x(1), x(0));  // atan2 handles the wrap -pi to pi
   xp(2) = (x(0) * x(2) + x(1) * x(3)) / xp(0);
   return xp;
 }
@@ -76,6 +76,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
    */
   VectorXd xp = Cartesian2Polar(x);
   VectorXd y = z - xp;
+  y(1) = Wrap2pi(y(1));  // ensure wrap -pi to pi
   MatrixXd Ht = H.transpose();
   MatrixXd S = H * P * Ht + R;
   MatrixXd K = P * Ht * S.inverse();
