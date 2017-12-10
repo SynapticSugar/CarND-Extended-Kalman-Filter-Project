@@ -31,28 +31,11 @@ FusionEKF::FusionEKF() {
   // measurement function matrix - laser
   H_laser << 1, 0, 0, 0, 0, 1, 0, 0;
 
-  // initial state transition matrix
-  MatrixXd F = MatrixXd(4, 4);
-  F << 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1;
-
-  // state convariance matrix
-  MatrixXd P = MatrixXd(4, 4);
-  P << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 1000;
-
-  // state vector
-  VectorXd x = VectorXd(4);
-  x << 0, 0, 0, 0;
-
-  // process covariance matrix
-  MatrixXd Q = MatrixXd(4, 4);
-
   // acceleration noise
   noise_ax = 9;
   noise_ay = 9;
 
   ekf = KalmanFilter();
-  ekf.Init(x, P, F, H_laser, R_laser, Q);
-
   tools = Tools();
 }
 
@@ -72,6 +55,21 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
      * Remember: you'll need to convert radar from polar to cartesian
      * coordinates.
      */
+    // initial state transition matrix
+    MatrixXd F = MatrixXd(4, 4);
+    F << 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1;
+
+    // state convariance matrix
+    MatrixXd P = MatrixXd(4, 4);
+    P << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 1000;
+
+    // state vector
+    VectorXd x = VectorXd(4);
+    x << 0, 0, 0, 0;
+
+    // process covariance matrix
+    MatrixXd Q = MatrixXd(4, 4);
+    ekf.Init(x, P, F, H_laser, R_laser, Q);
 
     if (measurement_pack.sensor_type == MeasurementPackage::RADAR) {
       /**

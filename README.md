@@ -3,21 +3,23 @@ Self-Driving Car Engineer Nanodegree Program
 
 ## Introduction
 
-This project utilizes a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements.
+This project utilizes a Kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements.
 
-## Code should compile
+## Code Should Compile
+
+See Installation and Build instructions at the end of this writup.
 
 ## Accuracy
 
-The algorithm was run against a simulator that included two datasets.  The first dataset was availible for comparing the ground truth and the second dataset was hidden within the simulator itself. The accuracy of position and velocity of the target must be less than or equal to ```.11``` and ```.52``` repectively.
+The algorithm was run against a simulator that included two datasets.  The first dataset was available for comparing the ground truth and the second dataset was hidden within the simulator itself. The accuracy of position and velocity of the target must be less than or equal to ```.11``` and ```.52``` repectively.
 
-The final results of running the algorith using both Lidar and Radar measurements against ```Dataset 1``` is shown below.
+The final results of running the algorithm using both lidar and radar measurements against ```Dataset 1``` is shown below.
 
 ![alt text](./dataset_1.png "Dataset 1 Laser and Radar EKF Results")
 
 It can be seen that the RMSE met the criteria with px, py, vx, and vy of ```[.0973, 0.0855, 0.4513, 0.4399]```.
 
-The sensor fusion of both Lidar and Radar actually creates a better estimate and achieved lower RMS error than if either was run independantly as shown in the following results performed on ```Dataset 1```.
+The sensor fusion of both lidar and radar actually creates a better estimate and achieved lower RMS error than if either was run independantly as shown in the following results performed on ```Dataset 1```.
 
 Lidar only: px, py, vx, and vy of ```[.1838, 0.1542, 0.6051, 0.4858]```
 
@@ -30,20 +32,19 @@ The results of running the algorithm against ```Dataset 2``` is shown below.
 It can be seen that the RMSE met the criteria on ```Dataset 2``` with px, py, vx, and vy of ```[.0726, 0.0967, 0.4579, 0.4966]```.
 
 
-## Follows the correct Algorithm
+## Follows the Correct Algorithm
 
-The sensor fusion algortihm follows the general processing flow as taught in the class and is described as follows:
+The sensor fusion algorithm follows the general processing flow as taught in the class and is described as follows:
 
-The EKF convariances, state vector, and transition functions are set up right in the FusionEKF constructor.
-The first measurement update is used to seed the state vector with the initial position and velocity as well as the initial time measurement.
+The EKF convariances, state vector, and transition functions are set up in the first measurement update. Is is used to seed the state vector with the initial position and velocity, as well as the initial time measurement.
 
-For each measurement after this the algorithm will first predict the new location of the target using the linear state stransition function with the time delta.  The process covariance matrix is also updated wiht the process noise and time delta. 
+For each measurement after this, the algorithm will first predict the new location of the target using the linear state stransition function with the time delta.  The process covariance matrix is also updated with the process noise and time delta. 
 
-The update steps for the Lidar and Radar measurements are handled differently.
+The update steps for the lidar and radar measurements are handled differently.
 
-In the case of a Lidar measurement, the algorithm feeds the new predicted state, measured state, and uncertainty matrix directly into the ```Update()``` function and calculates the new state and uncertainty covariance following the typical Kalman Filter approach.
+In the case of a lidar measurement, the algorithm feeds the new predicted state, measured state, and uncertainty matrix directly into the ```Update()``` function and calculates the new state and uncertainty covariance following the typical Kalman filter approach.
 
-In the case of a Radar measurement, the Measurement Jacobian function is calculated and passed with the predicted state to the ```UpdateEKF()``` function.  The predicted state is converted to polar coordinates first before calculating the new state esimate.
+In the case of a radar measurement, the measurement Jacobian function is calculated and passed with the predicted state to the ```UpdateEKF()``` function.  The predicted state is converted to polar coordinates first before calculating the new state esimate.
 
 The complete process flow diagram is shown below:
 
@@ -51,7 +52,7 @@ The complete process flow diagram is shown below:
 
 ## Code Effeciency
 
-Several methods are used to maintain code effeciency.  Creating and destroying matricies takes time.  This code creates each matrix once and does not destroy it until the the program ends.  When calling functions and setting matric structures up, matrices are passed in by reference instead of by value.  This reduces function call overhead as only one value needs to be copyed instead of a full data structure.
+Several methods are used to maintain code effeciency.  Creating and destroying matricies takes time.  This code creates each matrix once and does not destroy it until the the program ends.  When calling functions and setting matrix structures up, matrices are passed in by reference instead of by value.  This reduces function call overhead as only one value needs to be copied instead of a full data structure.
 
 ## Installation
 
