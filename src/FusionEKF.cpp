@@ -62,15 +62,13 @@ FusionEKF::FusionEKF() {
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-  /*    if (measurement_pack.sensor_type != MeasurementPackage::RADAR)
-        return;
-*/ /*****************************************************************************
-                                                                      *  Initialization
-                                                                      ****************************************************************************/
+/*****************************************************************************
+ *  Initialization
+ ****************************************************************************/
   if (!is_initialized) {
     /**
      * Initialize the state ekf.x with the first measurement.
-     * Create the covariance matrix.
+     * Create the covariance matrix. No need. This is already done in the constructor.
      * Remember: you'll need to convert radar from polar to cartesian
      * coordinates.
      */
