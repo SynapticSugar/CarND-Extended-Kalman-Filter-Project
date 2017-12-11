@@ -62,9 +62,9 @@ float Wrap2pi(float rval) {
 // Utility funtion to convert a cartesian state into a polar state
 VectorXd Cartesian2Polar(VectorXd &x) {
   VectorXd xp = VectorXd(3);
+  if (x(0) == 0 && x(1) == 0) x(0) = 1e-6; // avoid undefined atan2
   xp(0) = sqrt(x(0) * x(0) + x(1) * x(1));
-  // ensure we do not divide by zero
-  if (xp(0) < 1e-6) xp(0) = 1e-6;
+  if (xp(0) < 1e-6) xp(0) = 1e-6; // ensure we do not divide by zero
   xp(1) = atan2(x(1), x(0));  // atan2 handles the wrap -pi to pi
   xp(2) = (x(0) * x(2) + x(1) * x(3)) / xp(0);
   return xp;
